@@ -57,6 +57,8 @@ services:
       - redis:redis
     environment:
       - TZ=Asia/Shanghai
+    extra_hosts: #解决 curl 无法使用的问题，域名绑定 Nginx 的固定 ip，必须是固定 ip
+      - "s1.test.cn:172.100.0.2"
     networks:
       docker_net:
         ipv4_address: ${PHP56_IP}
