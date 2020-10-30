@@ -133,8 +133,8 @@ RUN apt-get update && apt-get install -y libmcrypt-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install sockets \
     && docker-php-ext-install gettext \
-    && pecl install /home/ext/redis-4.2.0.tgz \
-    && pecl install /home/ext/xdebug-2.5.5.tgz \
+    && pecl install redis-4.2.0.tgz \
+    && pecl install xdebug-2.5.5.tgz \
     && docker-php-ext-enable redis xdebug
 
 #方式二
