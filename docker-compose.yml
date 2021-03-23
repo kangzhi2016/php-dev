@@ -12,6 +12,7 @@ services:
       # - "8080:8080"
       # - "443:443"
     volumes:
+      # - ${WORKSPACES}:/var/www/html/
       - www-docker-sync:/var/www/html/
       - ./conf/nginx/conf.d:/etc/nginx/conf.d/
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -48,6 +49,7 @@ services:
     expose:
       - "9000"
     volumes:
+      # - ${WORKSPACES}:/var/www/html/
       - www-docker-sync:/var/www/html/
       - ./conf/php/php56.ini:/usr/local/etc/php/php.ini
       - ./conf/php/php-fpm.d/www56.conf:/usr/local/etc/php-fpm.d/www.conf
@@ -55,6 +57,7 @@ services:
     links:
       - mysql:mysql
       - redis:redis
+       - rabbitmq:rabbitmq
     environment:
       - TZ=Asia/Shanghai
     extra_hosts: #解决 curl 无法使用的问题，域名绑定 Nginx 的固定 ip，必须是固定 ipf
@@ -88,6 +91,17 @@ services:
       docker_net:
         ipv4_address: ${REDIS_IP}
 
+   rabbitmq:
+     image: rabbitmq:latest
+     ports:
+       - "5672:5672"
+       - "15672:15672"
+     environment:
+       - TZ=Asia/Shanghai
+     networks:
+       docker_net:
+         ipv4_address: ${RABBITMQ_IP}
+
   # this service sync a local dir in your computer with a dir on the app server side
   bg-sync:
     image: cweagans/bg-sync
@@ -99,19 +113,7 @@ services:
       SYNC_DESTINATION: /var/www/html
       SYNC_MAX_INOTIFY_WATCHES: 40000
     privileged: true
-
-  # portainer:
-  #   image: portainer/portainer:latest
-  #   ports:
-  #     - "9000:9000"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - ./portainer/:/data
-  #   networks:
-  #     docker_net:
-  #       ipv4_address: ${PORTAINER_IP}
-
-
+  
 networks:
   docker_net:
     driver: bridge
