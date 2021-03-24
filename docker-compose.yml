@@ -57,7 +57,7 @@ services:
     links:
       - mysql:mysql
       - redis:redis
-       - rabbitmq:rabbitmq
+      - rabbitmq:rabbitmq
     environment:
       - TZ=Asia/Shanghai
     extra_hosts: #解决 curl 无法使用的问题，域名绑定 Nginx 的固定 ip，必须是固定 ipf
@@ -91,16 +91,16 @@ services:
       docker_net:
         ipv4_address: ${REDIS_IP}
 
-   rabbitmq:
-     image: rabbitmq:latest
-     ports:
-       - "5672:5672"
-       - "15672:15672"
-     environment:
-       - TZ=Asia/Shanghai
-     networks:
-       docker_net:
-         ipv4_address: ${RABBITMQ_IP}
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      docker_net:
+        ipv4_address: ${RABBITMQ_IP}
 
   # this service sync a local dir in your computer with a dir on the app server side
   bg-sync:
@@ -113,7 +113,7 @@ services:
       SYNC_DESTINATION: /var/www/html
       SYNC_MAX_INOTIFY_WATCHES: 40000
     privileged: true
-  
+
 networks:
   docker_net:
     driver: bridge
