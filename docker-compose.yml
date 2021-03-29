@@ -38,6 +38,7 @@ services:
   #   links:
   #     - mysql:mysql
   #     - redis:redis
+  #     - rabbitmq:rabbitmq
   #   environment:
   #     - TZ=Asia/Shanghai
   #   networks:
@@ -92,7 +93,8 @@ services:
         ipv4_address: ${REDIS_IP}
 
   rabbitmq:
-    image: rabbitmq:latest
+    # image: rabbitmq:latest
+    build: ./rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
